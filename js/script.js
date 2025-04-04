@@ -22,4 +22,5 @@ mainForm.addEventListener("submit", (e) => {
   formData.forEach((val, key) => {
     console.log(`${key}: ${val}`);
   });
+  mainForm.reset();
 });
