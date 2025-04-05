@@ -73,7 +73,7 @@ body {
 }
 
 .immediate-matrix {
-  color: var(--orange);
+  color: #e4af20;
   display: inline;
 }
 
@@ -2073,9 +2073,7 @@ p {
     font-size: 22px;
   }
 }
-.main-form-title span {
-  color: var(--purple);
-}
+
 .main-form-btn {
   margin-top: 1rem;
   border-radius: 3px;
