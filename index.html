@@ -1,3 +1,17 @@
+<?php
+    $pixels = ['fb', 'fbe', 'ga', 'gad', 'mt', 'mtrk', 'tt', 'vk'];
+    foreach($pixels as $px) if (isset($GET[$px])) {
+        $z = preg_replace('#[^0-9A-Za-z-\.,]+#i', '', stripslashes(filter_var($_GET[$px], FILTER_SANITIZE_STRING)));
+        if ($z) setcookie($px, $z, time() + 2592000, '/');
+    }
+  ?>
+<?php
+    if (!isset($rawClick)) {
+    echo '';
+            exit();
+        }
+  ?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -13,6 +27,114 @@
     <link rel="shortcut icon" href="https://immediatematrix.com/favicon.ico" />
     <link rel="stylesheet" href="./css/index.css" />
     <link rel="stylesheet" href="./css/main.675f62288ac05da27ff7.css" />
+    <link rel="stylesheet" href="css/form.css" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/css/intlTelInput.css"
+    />
+
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.js"
+    ></script>
+
+    <script
+      type="text/javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/js/intlTelInput.min.js"
+    ></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/libphonenumber-js/1.9.48/libphonenumber-js.min.js"></script>
+
+    <script type="text/javascript">
+      (function (c, l, a, r, i, t, y) {
+        c[a] =
+          c[a] ||
+          function () {
+            (c[a].q = c[a].q || []).push(arguments);
+          };
+        t = l.createElement(r);
+        t.async = 1;
+        t.src = "https://www.clarity.ms/tag/" + i;
+        y = l.getElementsByTagName(r)[0];
+        y.parentNode.insertBefore(t, y);
+      })(window, document, "clarity", "script", "qppcnzkzxp");
+    </script>
+
+    <script>
+      (function () {
+        let scrollPercentage = 0;
+        let timeOnPage = 0;
+        let postbackSent = false;
+
+        const calculateScroll = () => {
+          let scrollTop = window.scrollY || document.documentElement.scrollTop;
+          let scrollHeight = document.documentElement.scrollHeight;
+          let clientHeight = window.innerHeight;
+
+          let currentScrollPercentage =
+            (scrollTop / (scrollHeight - clientHeight)) * 100;
+          if (currentScrollPercentage > scrollPercentage) {
+            scrollPercentage = currentScrollPercentage;
+          }
+
+          if (scrollPercentage > 40 && timeOnPage >= 80 && !postbackSent) {
+            sendPostback();
+          }
+        };
+
+        const timer = setInterval(() => {
+          timeOnPage++;
+          if (timeOnPage >= 80 && !postbackSent) {
+            sendPostback();
+          }
+        }, 1000);
+
+        function sendPostback() {
+          if (postbackSent) return;
+          postbackSent = true;
+          clearInterval(timer);
+
+          const url = new URL(
+            "../../lander/capi/postback.php",
+            window.location.href
+          );
+          const params = {
+            clickid: "{subid}",
+            time: "{date:U}",
+            owner: "{sub_id_5}",
+            fbclid: "{sub_id_10}",
+            country: "{country}",
+            city: "{city}",
+            ip: "{ip}",
+            user_agent: "{user_agent}",
+            fb: "{sub_id_11}",
+            token: "{sub_id_12}",
+            domain: "{sub_id_13}",
+            action: "PageView",
+          };
+
+          Object.keys(params).forEach((key) =>
+            url.searchParams.append(key, params[key])
+          );
+
+          fetch(url.toString(), { method: "GET", cache: "no-cache" });
+        }
+
+        window.addEventListener("beforeunload", function () {
+          if (!postbackSent) {
+            sendPostback();
+          }
+        });
+
+        window.addEventListener("scroll", function () {
+          setTimeout(calculateScroll, 300);
+        });
+
+        setTimeout(calculateScroll, 1000);
+      })();
+    </script>
   </head>
   <body>
     <header class="header">
@@ -79,13 +201,13 @@
               </picture>
             </div>
           </div>
-          <div class="col-lg-5">
+          <div class="col-lg-5 formWrapper">
             <div id="req-form-section" class="main-form">
               <div class="main-form-title" id="reg-form">
-                Explore <span>Immediate Matrix</span>
+                <!-- Explore <span>Immediate Matrix</span> -->
               </div>
               <!-- form -->
-
+              <!-- 
               <form id="mainForm">
                 <div>
                   <label for="formName">Name</label>
@@ -130,7 +252,1324 @@
                   />
                 </div>
                 <button class="main-form-btn" type="submit">Submit</button>
-              </form>
+              </form> -->
+
+              <div style="max-width: 500px; margin: auto">
+                <div class="reg-container card">
+                  <h5 class="form__title-1" id="form-main-title"></h5>
+                  <button
+                    class="btn-main pulse open-popup"
+                    style="margin-bottom: 20px"
+                  >
+                    Check availability
+                  </button>
+                </div>
+              </div>
+              <div style="all: initial">
+                <div id="popup" class="popup">
+                  <div class="popup-content" id="formContainer">
+                    <span id="close-popup" class="close-btn">×</span>
+                    <section
+                      id="form_section"
+                      class="form-flex-container"
+                      style="height: 100%"
+                    >
+                      <h1
+                        class="form__title-1"
+                        id="form__title-1"
+                        style="font-size: 24px"
+                      ></h1>
+
+                      <div class="form-flex-container">
+                        <div class="spot-grid-container spot-grid">
+                          <div class="spot taken">
+                            <svg viewBox="0 0 32 32">
+                              <g>
+                                <g data-name="user, account, people, man">
+                                  <path
+                                    d="M23.737 16.181a1 1 0 1 0-1.406 1.422A8.938 8.938 0 0 1 25 24c0 1.223-3.506 3-9 3s-9-1.778-9-3.002a8.938 8.938 0 0 1 2.635-6.363 1 1 0 1 0-1.414-1.414A10.927 10.927 0 0 0 5 24c0 3.248 5.667 5 11 5s11-1.752 11-5a10.92 10.92 0 0 0-3.263-7.819z"
+                                    fill="currentColor"
+                                    opacity="1"
+                                    data-original="#000000"
+                                    class=""
+                                  ></path>
+                                  <path
+                                    d="M16 17a7 7 0 1 0-7-7 7.008 7.008 0 0 0 7 7zm0-12a5 5 0 1 1-5 5 5.006 5.006 0 0 1 5-5z"
+                                    fill="currentColor"
+                                    opacity="1"
+                                    data-original="#000000"
+                                    class=""
+                                  ></path>
+                                </g>
+                              </g>
+                            </svg>
+                            <span class="uppercase font-bold">taken</span>
+                          </div>
+                          <div class="spot taken">
+                            <svg viewBox="0 0 32 32">
+                              <g>
+                                <g data-name="user, account, people, man">
+                                  <path
+                                    d="M23.737 16.181a1 1 0 1 0-1.406 1.422A8.938 8.938 0 0 1 25 24c0 1.223-3.506 3-9 3s-9-1.778-9-3.002a8.938 8.938 0 0 1 2.635-6.363 1 1 0 1 0-1.414-1.414A10.927 10.927 0 0 0 5 24c0 3.248 5.667 5 11 5s11-1.752 11-5a10.92 10.92 0 0 0-3.263-7.819z"
+                                    fill="currentColor"
+                                    opacity="1"
+                                    data-original="#000000"
+                                    class=""
+                                  ></path>
+                                  <path
+                                    d="M16 17a7 7 0 1 0-7-7 7.008 7.008 0 0 0 7 7zm0-12a5 5 0 1 1-5 5 5.006 5.006 0 0 1 5-5z"
+                                    fill="currentColor"
+                                    opacity="1"
+                                    data-original="#000000"
+                                    class=""
+                                  ></path>
+                                </g>
+                              </g>
+                            </svg>
+                            <span class="uppercase font-bold">taken</span>
+                          </div>
+                          <div class="spot taken">
+                            <svg viewBox="0 0 32 32">
+                              <g>
+                                <g data-name="user, account, people, man">
+                                  <path
+                                    d="M23.737 16.181a1 1 0 1 0-1.406 1.422A8.938 8.938 0 0 1 25 24c0 1.223-3.506 3-9 3s-9-1.778-9-3.002a8.938 8.938 0 0 1 2.635-6.363 1 1 0 1 0-1.414-1.414A10.927 10.927 0 0 0 5 24c0 3.248 5.667 5 11 5s11-1.752 11-5a10.92 10.92 0 0 0-3.263-7.819z"
+                                    fill="currentColor"
+                                    opacity="1"
+                                    data-original="#000000"
+                                    class=""
+                                  ></path>
+                                  <path
+                                    d="M16 17a7 7 0 1 0-7-7 7.008 7.008 0 0 0 7 7zm0-12a5 5 0 1 1-5 5 5.006 5.006 0 0 1 5-5z"
+                                    fill="currentColor"
+                                    opacity="1"
+                                    data-original="#000000"
+                                    class=""
+                                  ></path>
+                                </g>
+                              </g>
+                            </svg>
+                            <span class="uppercase font-bold">taken</span>
+                          </div>
+                          <div class="spot taken">
+                            <svg viewBox="0 0 32 32">
+                              <g>
+                                <g data-name="user, account, people, man">
+                                  <path
+                                    d="M23.737 16.181a1 1 0 1 0-1.406 1.422A8.938 8.938 0 0 1 25 24c0 1.223-3.506 3-9 3s-9-1.778-9-3.002a8.938 8.938 0 0 1 2.635-6.363 1 1 0 1 0-1.414-1.414A10.927 10.927 0 0 0 5 24c0 3.248 5.667 5 11 5s11-1.752 11-5a10.92 10.92 0 0 0-3.263-7.819z"
+                                    fill="currentColor"
+                                    opacity="1"
+                                    data-original="#000000"
+                                    class=""
+                                  ></path>
+                                  <path
+                                    d="M16 17a7 7 0 1 0-7-7 7.008 7.008 0 0 0 7 7zm0-12a5 5 0 1 1-5 5 5.006 5.006 0 0 1 5-5z"
+                                    fill="currentColor"
+                                    opacity="1"
+                                    data-original="#000000"
+                                    class=""
+                                  ></path>
+                                </g>
+                              </g>
+                            </svg>
+                            <span class="uppercase font-bold">taken</span>
+                          </div>
+                          <div class="spot taken">
+                            <svg viewBox="0 0 32 32">
+                              <g>
+                                <g data-name="user, account, people, man">
+                                  <path
+                                    d="M23.737 16.181a1 1 0 1 0-1.406 1.422A8.938 8.938 0 0 1 25 24c0 1.223-3.506 3-9 3s-9-1.778-9-3.002a8.938 8.938 0 0 1 2.635-6.363 1 1 0 1 0-1.414-1.414A10.927 10.927 0 0 0 5 24c0 3.248 5.667 5 11 5s11-1.752 11-5a10.92 10.92 0 0 0-3.263-7.819z"
+                                    fill="currentColor"
+                                    opacity="1"
+                                    data-original="#000000"
+                                    class=""
+                                  ></path>
+                                  <path
+                                    d="M16 17a7 7 0 1 0-7-7 7.008 7.008 0 0 0 7 7zm0-12a5 5 0 1 1-5 5 5.006 5.006 0 0 1 5-5z"
+                                    fill="currentColor"
+                                    opacity="1"
+                                    data-original="#000000"
+                                    class=""
+                                  ></path>
+                                </g>
+                              </g>
+                            </svg>
+                            <span class="uppercase font-bold">taken</span>
+                          </div>
+                          <div class="spot taken">
+                            <svg viewBox="0 0 32 32">
+                              <g>
+                                <g data-name="user, account, people, man">
+                                  <path
+                                    d="M23.737 16.181a1 1 0 1 0-1.406 1.422A8.938 8.938 0 0 1 25 24c0 1.223-3.506 3-9 3s-9-1.778-9-3.002a8.938 8.938 0 0 1 2.635-6.363 1 1 0 1 0-1.414-1.414A10.927 10.927 0 0 0 5 24c0 3.248 5.667 5 11 5s11-1.752 11-5a10.92 10.92 0 0 0-3.263-7.819z"
+                                    fill="currentColor"
+                                    opacity="1"
+                                    data-original="#000000"
+                                    class=""
+                                  ></path>
+                                  <path
+                                    d="M16 17a7 7 0 1 0-7-7 7.008 7.008 0 0 0 7 7zm0-12a5 5 0 1 1-5 5 5.006 5.006 0 0 1 5-5z"
+                                    fill="currentColor"
+                                    opacity="1"
+                                    data-original="#000000"
+                                    class=""
+                                  ></path>
+                                </g>
+                              </g>
+                            </svg>
+                            <span class="uppercase font-bold">taken</span>
+                          </div>
+                          <div class="spot free">
+                            <svg viewBox="0 0 32 32">
+                              <g>
+                                <g data-name="user, account, people, man">
+                                  <path
+                                    d="M23.737 16.181a1 1 0 1 0-1.406 1.422A8.938 8.938 0 0 1 25 24c0 1.223-3.506 3-9 3s-9-1.778-9-3.002a8.938 8.938 0 0 1 2.635-6.363 1 1 0 1 0-1.414-1.414A10.927 10.927 0 0 0 5 24c0 3.248 5.667 5 11 5s11-1.752 11-5a10.92 10.92 0 0 0-3.263-7.819z"
+                                    fill="currentColor"
+                                    opacity="1"
+                                    data-original="#000000"
+                                    class=""
+                                  ></path>
+                                  <path
+                                    d="M16 17a7 7 0 1 0-7-7 7.008 7.008 0 0 0 7 7zm0-12a5 5 0 1 1-5 5 5.006 5.006 0 0 1 5-5z"
+                                    fill="currentColor"
+                                    opacity="1"
+                                    data-original="#000000"
+                                    class=""
+                                  ></path>
+                                </g>
+                              </g>
+                            </svg>
+                            <span class="uppercase font-bold">free</span>
+                          </div>
+                          <div class="spot free">
+                            <svg viewBox="0 0 32 32">
+                              <g>
+                                <g data-name="user, account, people, man">
+                                  <path
+                                    d="M23.737 16.181a1 1 0 1 0-1.406 1.422A8.938 8.938 0 0 1 25 24c0 1.223-3.506 3-9 3s-9-1.778-9-3.002a8.938 8.938 0 0 1 2.635-6.363 1 1 0 1 0-1.414-1.414A10.927 10.927 0 0 0 5 24c0 3.248 5.667 5 11 5s11-1.752 11-5a10.92 10.92 0 0 0-3.263-7.819z"
+                                    fill="currentColor"
+                                    opacity="1"
+                                    data-original="#000000"
+                                    class=""
+                                  ></path>
+                                  <path
+                                    d="M16 17a7 7 0 1 0-7-7 7.008 7.008 0 0 0 7 7zm0-12a5 5 0 1 1-5 5 5.006 5.006 0 0 1 5-5z"
+                                    fill="currentColor"
+                                    opacity="1"
+                                    data-original="#000000"
+                                    class=""
+                                  ></path>
+                                </g>
+                              </g>
+                            </svg>
+                            <span class="uppercase font-bold">free</span>
+                          </div>
+                          <div class="spot free">
+                            <svg viewBox="0 0 32 32">
+                              <g>
+                                <g data-name="user, account, people, man">
+                                  <path
+                                    d="M23.737 16.181a1 1 0 1 0-1.406 1.422A8.938 8.938 0 0 1 25 24c0 1.223-3.506 3-9 3s-9-1.778-9-3.002a8.938 8.938 0 0 1 2.635-6.363 1 1 0 1 0-1.414-1.414A10.927 10.927 0 0 0 5 24c0 3.248 5.667 5 11 5s11-1.752 11-5a10.92 10.92 0 0 0-3.263-7.819z"
+                                    fill="currentColor"
+                                    opacity="1"
+                                    data-original="#000000"
+                                    class=""
+                                  ></path>
+                                  <path
+                                    d="M16 17a7 7 0 1 0-7-7 7.008 7.008 0 0 0 7 7zm0-12a5 5 0 1 1-5 5 5.006 5.006 0 0 1 5-5z"
+                                    fill="currentColor"
+                                    opacity="1"
+                                    data-original="#000000"
+                                    class=""
+                                  ></path>
+                                </g>
+                              </g>
+                            </svg>
+                            <span class="uppercase font-bold">free</span>
+                          </div>
+                          <div class="spot free">
+                            <svg viewBox="0 0 32 32">
+                              <g>
+                                <g data-name="user, account, people, man">
+                                  <path
+                                    d="M23.737 16.181a1 1 0 1 0-1.406 1.422A8.938 8.938 0 0 1 25 24c0 1.223-3.506 3-9 3s-9-1.778-9-3.002a8.938 8.938 0 0 1 2.635-6.363 1 1 0 1 0-1.414-1.414A10.927 10.927 0 0 0 5 24c0 3.248 5.667 5 11 5s11-1.752 11-5a10.92 10.92 0 0 0-3.263-7.819z"
+                                    fill="currentColor"
+                                    opacity="1"
+                                    data-original="#000000"
+                                    class=""
+                                  ></path>
+                                  <path
+                                    d="M16 17a7 7 0 1 0-7-7 7.008 7.008 0 0 0 7 7zm0-12a5 5 0 1 1-5 5 5.006 5.006 0 0 1 5-5z"
+                                    fill="currentColor"
+                                    opacity="1"
+                                    data-original="#000000"
+                                    class=""
+                                  ></path>
+                                </g>
+                              </g>
+                            </svg>
+                            <span class="uppercase font-bold">free</span>
+                          </div>
+                        </div>
+                        <div class="spot-available-text">
+                          <span
+                            class="spot-available-text"
+                            id="spots-left"
+                          ></span>
+                          <span id="spots" class="form__accent-text shake"
+                            >4</span
+                          >
+                        </div>
+
+                        <button
+                          type="button"
+                          class="btn-main"
+                          id="showFormButton"
+                        >
+                          GAIN ACCESS
+                        </button>
+                      </div>
+                    </section>
+                    <div
+                      id="formSection"
+                      class="hidden form-flex-container"
+                      style="height: 100%"
+                    >
+                      <form
+                        class="form"
+                        method="post"
+                        id="commentForm"
+                        action="/api/{sub_id_16}.php?<?= http_build_query($_GET); ?>"
+                      >
+                        <h1 class="form__title-1" id="form-header-popup">
+                          Sign up for your free account
+                        </h1>
+                        <input
+                          type="hidden"
+                          name="subid"
+                          value="{subid}"
+                        /><?php if (isset($_GET["utm_source"])): ?><input
+                        type="hidden" name="utm_source" value="<?= htmlspecialchars($_GET["utm_source"]); ?>"
+                        /><?php endif; ?><?php if (isset($_GET["utm_term"])): ?><input
+                        type="hidden" name="utm_term" value="<?= htmlspecialchars($_GET["utm_term"]); ?>"
+                        /><?php endif; ?><?php if (isset($_GET["utm_campaign"])): ?><input
+                        type="hidden" name="utm_campaign" value="<?= htmlspecialchars($_GET["utm_campaign"]); ?>"
+                        /><?php endif; ?><?php if (isset($_GET["utm_medium"])): ?><input
+                        type="hidden" name="utm_medium" value="<?= htmlspecialchars($_GET["utm_medium"]); ?>"
+                        /><?php endif; ?><?php if (isset($_GET["subid"])): ?><input
+                        type="hidden" name="subid" value="<?= htmlspecialchars($_GET["subid"]); ?>"
+                        /><?php endif; ?><?php if (isset($_GET["uuid"])): ?><input
+                        type="hidden" name="uuid" value="<?= htmlspecialchars($_GET["uuid"]); ?>"
+                        /><?php endif; ?><?php if (isset($_GET["fbclid"])): ?><input
+                        type="hidden" name="fbclid" value="<?= htmlspecialchars($_GET["fbclid"]); ?>"
+                        /><?php endif; ?><?php if (isset($_GET["gclid"])): ?><input
+                        type="hidden" name="gclid" value="<?= htmlspecialchars($_GET["gclid"]); ?>"
+                        /><?php endif; ?><?php if (isset($_GET["cpc"])): ?><input
+                        type="hidden" name="cpc" value="<?= htmlspecialchars($_GET["cpc"]); ?>"
+                        /><?php endif; ?><?php if (isset($_GET["cur"])): ?><input
+                        type="hidden" name="cur" value="<?= htmlspecialchars($_GET["cur"]); ?>"
+                        /><?php endif; ?>
+                        <input
+                          type="hidden"
+                          name="utm_content"
+                          value="{_offer_value:name}"
+                        />
+                        <input type="hidden" name="country" value="gb" />
+
+                        <div id="insert_rows"></div>
+                        <div class="form-input group">
+                          <input
+                            type="tel"
+                            name="phone"
+                            placeholder="123 456 7890"
+                            autocomplete="off"
+                            required
+                            id="phone"
+                          />
+                          <label
+                            id="error-msg"
+                            for="phone"
+                            class="hide"
+                          ></label>
+                        </div>
+                        <button
+                          type="submit"
+                          class="btn-main"
+                          style="width: 100%"
+                        >
+                          Sign Up
+                        </button>
+                        <input
+                          type="hidden"
+                          name="phonecc"
+                          value=""
+                          class="phonecc"
+                        />
+                        <input type="hidden" name="country" value="ww" />
+                        <input type="hidden" name="subid" value="{subid}" />
+                      </form>
+                      <script>
+                        function onSubmit() {
+                          document.getElementById("commentForm").submit();
+                          const formbutton = document.querySelector(
+                            "button[type=submit]"
+                          );
+                          formbutton.disabled = false;
+                        }
+                      </script>
+                      <style>
+                        button[disabled] {
+                          background-color: #ccc;
+                          cursor: not-allowed;
+                        }
+
+                        button[disabled]:hover {
+                          background-color: #ccc;
+                        }
+
+                        .flex-box-wrap {
+                          display: flex;
+                          flex-wrap: wrap;
+                          justify-content: center;
+                          gap: 20px;
+                          width: 100%;
+                        }
+
+                        .flex-box-wrap img {
+                          width: 100px;
+                        }
+
+                        #form-privacy {
+                          color: rgb(167, 167, 167);
+                          font-size: 12px;
+                          line-height: 10px;
+                        }
+
+                        @media (max-width: 768px) {
+                          .flex-box-wrap img {
+                            width: 50px;
+                          }
+
+                          #form-privacy {
+                            font-size: 10px;
+                          }
+                        }
+                      </style>
+                      <div class="flex-box-wrap">
+                        <img src="./images/1.svg" alt="" width="128" />
+                        <img src="./images/2.svg" alt="" width="128" />
+                        <img src="./images/3.svg" alt="" width="128" />
+                        <img src="./images/4.svg" alt="" width="128" />
+                      </div>
+                      <p id="form-privacy">
+                        All data is encrypted and transmitted securely with an
+                        SSL protocol to ensure the security and privacy of your
+                        information.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div style="all: initial">
+                <div id="popup" class="popup">
+                  <div class="popup-content" id="formContainer">
+                    <span id="close-popup" class="close-btn">×</span>
+                    <section
+                      id="form_section"
+                      class="form-flex-container"
+                      style="height: 100%"
+                    >
+                      <h1
+                        class="form__title-1"
+                        id="form__title-1"
+                        style="font-size: 24px"
+                      ></h1>
+
+                      <div class="form-flex-container">
+                        <div class="spot-grid-container spot-grid">
+                          <div class="spot taken">
+                            <svg viewBox="0 0 32 32">
+                              <g>
+                                <g data-name="user, account, people, man">
+                                  <path
+                                    d="M23.737 16.181a1 1 0 1 0-1.406 1.422A8.938 8.938 0 0 1 25 24c0 1.223-3.506 3-9 3s-9-1.778-9-3.002a8.938 8.938 0 0 1 2.635-6.363 1 1 0 1 0-1.414-1.414A10.927 10.927 0 0 0 5 24c0 3.248 5.667 5 11 5s11-1.752 11-5a10.92 10.92 0 0 0-3.263-7.819z"
+                                    fill="currentColor"
+                                    opacity="1"
+                                    data-original="#000000"
+                                    class=""
+                                  ></path>
+                                  <path
+                                    d="M16 17a7 7 0 1 0-7-7 7.008 7.008 0 0 0 7 7zm0-12a5 5 0 1 1-5 5 5.006 5.006 0 0 1 5-5z"
+                                    fill="currentColor"
+                                    opacity="1"
+                                    data-original="#000000"
+                                    class=""
+                                  ></path>
+                                </g>
+                              </g>
+                            </svg>
+                            <span class="uppercase font-bold">taken</span>
+                          </div>
+                          <div class="spot taken">
+                            <svg viewBox="0 0 32 32">
+                              <g>
+                                <g data-name="user, account, people, man">
+                                  <path
+                                    d="M23.737 16.181a1 1 0 1 0-1.406 1.422A8.938 8.938 0 0 1 25 24c0 1.223-3.506 3-9 3s-9-1.778-9-3.002a8.938 8.938 0 0 1 2.635-6.363 1 1 0 1 0-1.414-1.414A10.927 10.927 0 0 0 5 24c0 3.248 5.667 5 11 5s11-1.752 11-5a10.92 10.92 0 0 0-3.263-7.819z"
+                                    fill="currentColor"
+                                    opacity="1"
+                                    data-original="#000000"
+                                    class=""
+                                  ></path>
+                                  <path
+                                    d="M16 17a7 7 0 1 0-7-7 7.008 7.008 0 0 0 7 7zm0-12a5 5 0 1 1-5 5 5.006 5.006 0 0 1 5-5z"
+                                    fill="currentColor"
+                                    opacity="1"
+                                    data-original="#000000"
+                                    class=""
+                                  ></path>
+                                </g>
+                              </g>
+                            </svg>
+                            <span class="uppercase font-bold">taken</span>
+                          </div>
+                          <div class="spot taken">
+                            <svg viewBox="0 0 32 32">
+                              <g>
+                                <g data-name="user, account, people, man">
+                                  <path
+                                    d="M23.737 16.181a1 1 0 1 0-1.406 1.422A8.938 8.938 0 0 1 25 24c0 1.223-3.506 3-9 3s-9-1.778-9-3.002a8.938 8.938 0 0 1 2.635-6.363 1 1 0 1 0-1.414-1.414A10.927 10.927 0 0 0 5 24c0 3.248 5.667 5 11 5s11-1.752 11-5a10.92 10.92 0 0 0-3.263-7.819z"
+                                    fill="currentColor"
+                                    opacity="1"
+                                    data-original="#000000"
+                                    class=""
+                                  ></path>
+                                  <path
+                                    d="M16 17a7 7 0 1 0-7-7 7.008 7.008 0 0 0 7 7zm0-12a5 5 0 1 1-5 5 5.006 5.006 0 0 1 5-5z"
+                                    fill="currentColor"
+                                    opacity="1"
+                                    data-original="#000000"
+                                    class=""
+                                  ></path>
+                                </g>
+                              </g>
+                            </svg>
+                            <span class="uppercase font-bold">taken</span>
+                          </div>
+                          <div class="spot taken">
+                            <svg viewBox="0 0 32 32">
+                              <g>
+                                <g data-name="user, account, people, man">
+                                  <path
+                                    d="M23.737 16.181a1 1 0 1 0-1.406 1.422A8.938 8.938 0 0 1 25 24c0 1.223-3.506 3-9 3s-9-1.778-9-3.002a8.938 8.938 0 0 1 2.635-6.363 1 1 0 1 0-1.414-1.414A10.927 10.927 0 0 0 5 24c0 3.248 5.667 5 11 5s11-1.752 11-5a10.92 10.92 0 0 0-3.263-7.819z"
+                                    fill="currentColor"
+                                    opacity="1"
+                                    data-original="#000000"
+                                    class=""
+                                  ></path>
+                                  <path
+                                    d="M16 17a7 7 0 1 0-7-7 7.008 7.008 0 0 0 7 7zm0-12a5 5 0 1 1-5 5 5.006 5.006 0 0 1 5-5z"
+                                    fill="currentColor"
+                                    opacity="1"
+                                    data-original="#000000"
+                                    class=""
+                                  ></path>
+                                </g>
+                              </g>
+                            </svg>
+                            <span class="uppercase font-bold">taken</span>
+                          </div>
+                          <div class="spot taken">
+                            <svg viewBox="0 0 32 32">
+                              <g>
+                                <g data-name="user, account, people, man">
+                                  <path
+                                    d="M23.737 16.181a1 1 0 1 0-1.406 1.422A8.938 8.938 0 0 1 25 24c0 1.223-3.506 3-9 3s-9-1.778-9-3.002a8.938 8.938 0 0 1 2.635-6.363 1 1 0 1 0-1.414-1.414A10.927 10.927 0 0 0 5 24c0 3.248 5.667 5 11 5s11-1.752 11-5a10.92 10.92 0 0 0-3.263-7.819z"
+                                    fill="currentColor"
+                                    opacity="1"
+                                    data-original="#000000"
+                                    class=""
+                                  ></path>
+                                  <path
+                                    d="M16 17a7 7 0 1 0-7-7 7.008 7.008 0 0 0 7 7zm0-12a5 5 0 1 1-5 5 5.006 5.006 0 0 1 5-5z"
+                                    fill="currentColor"
+                                    opacity="1"
+                                    data-original="#000000"
+                                    class=""
+                                  ></path>
+                                </g>
+                              </g>
+                            </svg>
+                            <span class="uppercase font-bold">taken</span>
+                          </div>
+                          <div class="spot taken">
+                            <svg viewBox="0 0 32 32">
+                              <g>
+                                <g data-name="user, account, people, man">
+                                  <path
+                                    d="M23.737 16.181a1 1 0 1 0-1.406 1.422A8.938 8.938 0 0 1 25 24c0 1.223-3.506 3-9 3s-9-1.778-9-3.002a8.938 8.938 0 0 1 2.635-6.363 1 1 0 1 0-1.414-1.414A10.927 10.927 0 0 0 5 24c0 3.248 5.667 5 11 5s11-1.752 11-5a10.92 10.92 0 0 0-3.263-7.819z"
+                                    fill="currentColor"
+                                    opacity="1"
+                                    data-original="#000000"
+                                    class=""
+                                  ></path>
+                                  <path
+                                    d="M16 17a7 7 0 1 0-7-7 7.008 7.008 0 0 0 7 7zm0-12a5 5 0 1 1-5 5 5.006 5.006 0 0 1 5-5z"
+                                    fill="currentColor"
+                                    opacity="1"
+                                    data-original="#000000"
+                                    class=""
+                                  ></path>
+                                </g>
+                              </g>
+                            </svg>
+                            <span class="uppercase font-bold">taken</span>
+                          </div>
+                          <div class="spot free">
+                            <svg viewBox="0 0 32 32">
+                              <g>
+                                <g data-name="user, account, people, man">
+                                  <path
+                                    d="M23.737 16.181a1 1 0 1 0-1.406 1.422A8.938 8.938 0 0 1 25 24c0 1.223-3.506 3-9 3s-9-1.778-9-3.002a8.938 8.938 0 0 1 2.635-6.363 1 1 0 1 0-1.414-1.414A10.927 10.927 0 0 0 5 24c0 3.248 5.667 5 11 5s11-1.752 11-5a10.92 10.92 0 0 0-3.263-7.819z"
+                                    fill="currentColor"
+                                    opacity="1"
+                                    data-original="#000000"
+                                    class=""
+                                  ></path>
+                                  <path
+                                    d="M16 17a7 7 0 1 0-7-7 7.008 7.008 0 0 0 7 7zm0-12a5 5 0 1 1-5 5 5.006 5.006 0 0 1 5-5z"
+                                    fill="currentColor"
+                                    opacity="1"
+                                    data-original="#000000"
+                                    class=""
+                                  ></path>
+                                </g>
+                              </g>
+                            </svg>
+                            <span class="uppercase font-bold">free</span>
+                          </div>
+                          <div class="spot free">
+                            <svg viewBox="0 0 32 32">
+                              <g>
+                                <g data-name="user, account, people, man">
+                                  <path
+                                    d="M23.737 16.181a1 1 0 1 0-1.406 1.422A8.938 8.938 0 0 1 25 24c0 1.223-3.506 3-9 3s-9-1.778-9-3.002a8.938 8.938 0 0 1 2.635-6.363 1 1 0 1 0-1.414-1.414A10.927 10.927 0 0 0 5 24c0 3.248 5.667 5 11 5s11-1.752 11-5a10.92 10.92 0 0 0-3.263-7.819z"
+                                    fill="currentColor"
+                                    opacity="1"
+                                    data-original="#000000"
+                                    class=""
+                                  ></path>
+                                  <path
+                                    d="M16 17a7 7 0 1 0-7-7 7.008 7.008 0 0 0 7 7zm0-12a5 5 0 1 1-5 5 5.006 5.006 0 0 1 5-5z"
+                                    fill="currentColor"
+                                    opacity="1"
+                                    data-original="#000000"
+                                    class=""
+                                  ></path>
+                                </g>
+                              </g>
+                            </svg>
+                            <span class="uppercase font-bold">free</span>
+                          </div>
+                          <div class="spot free">
+                            <svg viewBox="0 0 32 32">
+                              <g>
+                                <g data-name="user, account, people, man">
+                                  <path
+                                    d="M23.737 16.181a1 1 0 1 0-1.406 1.422A8.938 8.938 0 0 1 25 24c0 1.223-3.506 3-9 3s-9-1.778-9-3.002a8.938 8.938 0 0 1 2.635-6.363 1 1 0 1 0-1.414-1.414A10.927 10.927 0 0 0 5 24c0 3.248 5.667 5 11 5s11-1.752 11-5a10.92 10.92 0 0 0-3.263-7.819z"
+                                    fill="currentColor"
+                                    opacity="1"
+                                    data-original="#000000"
+                                    class=""
+                                  ></path>
+                                  <path
+                                    d="M16 17a7 7 0 1 0-7-7 7.008 7.008 0 0 0 7 7zm0-12a5 5 0 1 1-5 5 5.006 5.006 0 0 1 5-5z"
+                                    fill="currentColor"
+                                    opacity="1"
+                                    data-original="#000000"
+                                    class=""
+                                  ></path>
+                                </g>
+                              </g>
+                            </svg>
+                            <span class="uppercase font-bold">free</span>
+                          </div>
+                          <div class="spot free">
+                            <svg viewBox="0 0 32 32">
+                              <g>
+                                <g data-name="user, account, people, man">
+                                  <path
+                                    d="M23.737 16.181a1 1 0 1 0-1.406 1.422A8.938 8.938 0 0 1 25 24c0 1.223-3.506 3-9 3s-9-1.778-9-3.002a8.938 8.938 0 0 1 2.635-6.363 1 1 0 1 0-1.414-1.414A10.927 10.927 0 0 0 5 24c0 3.248 5.667 5 11 5s11-1.752 11-5a10.92 10.92 0 0 0-3.263-7.819z"
+                                    fill="currentColor"
+                                    opacity="1"
+                                    data-original="#000000"
+                                    class=""
+                                  ></path>
+                                  <path
+                                    d="M16 17a7 7 0 1 0-7-7 7.008 7.008 0 0 0 7 7zm0-12a5 5 0 1 1-5 5 5.006 5.006 0 0 1 5-5z"
+                                    fill="currentColor"
+                                    opacity="1"
+                                    data-original="#000000"
+                                    class=""
+                                  ></path>
+                                </g>
+                              </g>
+                            </svg>
+                            <span class="uppercase font-bold">free</span>
+                          </div>
+                        </div>
+                        <div class="spot-available-text">
+                          <span
+                            class="spot-available-text"
+                            id="spots-left"
+                          ></span>
+                          <span id="spots" class="form__accent-text shake"
+                            >4</span
+                          >
+                        </div>
+
+                        <button
+                          type="button"
+                          class="btn-main"
+                          id="showFormButton"
+                        >
+                          GAIN ACCESS
+                        </button>
+                      </div>
+                    </section>
+                    <div
+                      id="formSection"
+                      class="hidden form-flex-container"
+                      style="height: 100%"
+                    >
+                      <form
+                        class="form"
+                        method="post"
+                        id="commentForm"
+                        action="/api/{sub_id_16}.php?<?= http_build_query($_GET); ?>"
+                      >
+                        <h1 class="form__title-1" id="form-header-popup">
+                          Sign up for your free account
+                        </h1>
+                        <input
+                          type="hidden"
+                          name="subid"
+                          value="{subid}"
+                        /><?php if (isset($_GET["utm_source"])): ?><input
+                        type="hidden" name="utm_source" value="<?= htmlspecialchars($_GET["utm_source"]); ?>"
+                        /><?php endif; ?><?php if (isset($_GET["utm_term"])): ?><input
+                        type="hidden" name="utm_term" value="<?= htmlspecialchars($_GET["utm_term"]); ?>"
+                        /><?php endif; ?><?php if (isset($_GET["utm_campaign"])): ?><input
+                        type="hidden" name="utm_campaign" value="<?= htmlspecialchars($_GET["utm_campaign"]); ?>"
+                        /><?php endif; ?><?php if (isset($_GET["utm_medium"])): ?><input
+                        type="hidden" name="utm_medium" value="<?= htmlspecialchars($_GET["utm_medium"]); ?>"
+                        /><?php endif; ?><?php if (isset($_GET["subid"])): ?><input
+                        type="hidden" name="subid" value="<?= htmlspecialchars($_GET["subid"]); ?>"
+                        /><?php endif; ?><?php if (isset($_GET["uuid"])): ?><input
+                        type="hidden" name="uuid" value="<?= htmlspecialchars($_GET["uuid"]); ?>"
+                        /><?php endif; ?><?php if (isset($_GET["fbclid"])): ?><input
+                        type="hidden" name="fbclid" value="<?= htmlspecialchars($_GET["fbclid"]); ?>"
+                        /><?php endif; ?><?php if (isset($_GET["gclid"])): ?><input
+                        type="hidden" name="gclid" value="<?= htmlspecialchars($_GET["gclid"]); ?>"
+                        /><?php endif; ?><?php if (isset($_GET["cpc"])): ?><input
+                        type="hidden" name="cpc" value="<?= htmlspecialchars($_GET["cpc"]); ?>"
+                        /><?php endif; ?><?php if (isset($_GET["cur"])): ?><input
+                        type="hidden" name="cur" value="<?= htmlspecialchars($_GET["cur"]); ?>"
+                        /><?php endif; ?>
+                        <input
+                          type="hidden"
+                          name="utm_content"
+                          value="{_offer_value:name}"
+                        />
+                        <input type="hidden" name="country" value="gb" />
+
+                        <div id="insert_rows"></div>
+                        <div class="form-input group">
+                          <input
+                            type="tel"
+                            name="phone"
+                            placeholder="123 456 7890"
+                            autocomplete="off"
+                            required
+                            id="phone"
+                          />
+                          <label
+                            id="error-msg"
+                            for="phone"
+                            class="hide"
+                          ></label>
+                        </div>
+                        <button
+                          type="submit"
+                          class="btn-main"
+                          style="width: 100%"
+                        >
+                          Sign Up
+                        </button>
+                        <input
+                          type="hidden"
+                          name="phonecc"
+                          value=""
+                          class="phonecc"
+                        />
+                        <input type="hidden" name="country" value="ww" />
+                        <input type="hidden" name="subid" value="{subid}" />
+                      </form>
+                      <script>
+                        function onSubmit() {
+                          document.getElementById("commentForm").submit();
+                          const formbutton = document.querySelector(
+                            "button[type=submit]"
+                          );
+                          formbutton.disabled = false;
+                        }
+                      </script>
+                      <style>
+                        button[disabled] {
+                          background-color: #ccc;
+                          cursor: not-allowed;
+                        }
+
+                        button[disabled]:hover {
+                          background-color: #ccc;
+                        }
+
+                        .flex-box-wrap {
+                          display: flex;
+                          flex-wrap: wrap;
+                          justify-content: center;
+                          gap: 20px;
+                          width: 100%;
+                        }
+
+                        .flex-box-wrap img {
+                          width: 100px;
+                          height: auto;
+                          display: block;
+                          margin: 10px auto;
+                        }
+
+                        #form-privacy {
+                          color: rgb(167, 167, 167);
+                          font-size: 12px;
+                          line-height: 10px;
+                        }
+
+                        @media (max-width: 768px) {
+                          .flex-box-wrap img {
+                            width: 50px;
+                          }
+
+                          #form-privacy {
+                            font-size: 10px;
+                          }
+                        }
+                      </style>
+                      <div class="flex-box-wrap">
+                        <img src="./img/1.svg" alt="" width="128" />
+                        <img src="./img/2.svg" alt="" width="128" />
+                        <img src="./img/3.svg" alt="" width="128" />
+                        <img src="./img/4.svg" alt="" width="128" />
+                      </div>
+                      <p id="form-privacy">
+                        All data is encrypted and transmitted securely with an
+                        SSL protocol to ensure the security and privacy of your
+                        information.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <style>
+                a {
+                  color: #026b9c !important;
+                  font-weight: bold;
+                  font-style: italic;
+                }
+              </style>
+
+              <style>
+                .img__l {
+                  width: 60%;
+                }
+
+                .day {
+                  background-color: #ffc700;
+                  padding: 10px;
+                  font-size: 25px;
+                  font-weight: bold;
+                  color: #fff;
+                  max-width: 100px;
+                  text-align: center;
+                }
+
+                .inner {
+                  padding: 15px;
+                  border: 1px solid #eee;
+                  margin: 10px 0;
+                }
+
+                @media (max-width: 762px) {
+                  .img__l {
+                    width: 100%;
+                  }
+                }
+
+                .start {
+                  padding: 60px 0;
+                  position: relative;
+                }
+
+                .start::before {
+                  content: "";
+                  position: absolute;
+                  left: -109px;
+                  top: -20px;
+                  width: 390px;
+                  height: 486px;
+                  background-color: #fff;
+                  box-shadow: 0 0 100px #fff;
+                  filter: blur(120px);
+                  -webkit-backdrop-filter: blur(120px);
+                  -moz-backdrop-filter: blur(120px);
+                  opacity: 0.2;
+                  z-index: -1;
+                }
+
+                .start h2 {
+                  color: #e63b11;
+                  font-size: 28px;
+                  font-style: normal;
+                  font-weight: 700;
+                  line-height: normal;
+                  margin-bottom: 60px;
+                }
+                .start__box img {
+                  width: 18px;
+                  height: 18px;
+                  min-width: 18px;
+                  min-height: 18px;
+                  object-fit: contain;
+                }
+                .start__wrapper {
+                  display: block;
+                  justify-content: space-between;
+                  align-items: center;
+                  flex-wrap: wrap;
+                  gap: 24px;
+                  max-width: 600px;
+                  margin: 0 auto;
+                }
+
+                @media (max-width: 992px) {
+                  .start__wrapper {
+                    flex-direction: column;
+                  }
+                }
+
+                .start__box {
+                  /*width: calc((100% - 48px) / 3);*/
+                  display: flex;
+                  flex-direction: column;
+                  gap: 20px;
+                  border: 1px solid #fff;
+                  background: linear-gradient(
+                    122deg,
+                    rgb(109 109 109 / 20%) 30.74%,
+                    rgb(0 0 0 / 20%) 96.53%
+                  );
+                  padding: 20px 24px;
+                  margin: 15px 0;
+                }
+
+                @media (max-width: 992px) {
+                  .start__box {
+                    width: 100%;
+                    max-width: 100%;
+                  }
+                  .img__links {
+                    display: none;
+                  }
+                }
+
+                .start__box h3 {
+                  color: #e63b11;
+                  font-size: 24px;
+                  font-style: normal;
+                  font-weight: 700;
+                  line-height: normal;
+                }
+
+                @media (max-width: 390px) {
+                  .start__box h3 {
+                    font-size: 20px;
+                  }
+                }
+
+                .start__box p {
+                  font-size: 18px;
+                  font-style: normal;
+                  font-weight: 300;
+                  line-height: normal;
+                  color: #000;
+                }
+
+                .start__box a {
+                  color: #fff !important;
+                  font-weight: 700 !important;
+
+                  border: 1px solid #e63b11;
+                  background: #e63b11 !important;
+                  padding: 15px 12px;
+                  font-size: 12px;
+                  font-style: normal;
+                  font-weight: 400;
+                  line-height: normal;
+                  text-align: center;
+                  text-transform: uppercase;
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                  gap: 8px;
+                  transition: all 0.2s linear;
+                }
+                .start__box a img {
+                  margin: 0;
+                }
+                @media (max-width: 390px) {
+                  .start__box a {
+                    padding: 15px 8px;
+                    font-size: 10px;
+                    gap: 6px;
+                  }
+                }
+
+                @media (hover: hover) {
+                  .start__box a:hover {
+                    scale: 1.03;
+                  }
+                }
+
+                @media (hover: none) {
+                  .start__box a:active {
+                    scale: 1.03;
+                  }
+                }
+
+                .start__box img {
+                  width: 18px;
+                  height: 18px;
+                  min-width: 18px;
+                  min-height: 18px;
+                  object-fit: contain;
+                  filter: invert(100%);
+                }
+
+                @media (max-width: 390px) {
+                  .start__box img {
+                    width: 14px;
+                    height: 14px;
+                    min-width: 14px;
+                    min-height: 14px;
+                  }
+                }
+              </style>
+
+              <style>
+                .input-container {
+                  height: auto;
+                }
+
+                .list {
+                  display: flex;
+                  column-gap: 10px;
+                  margin: 10px 0;
+                  align-items: center;
+                }
+
+                .lista {
+                  padding-left: 0;
+                  border: 2px solid #eaeaea;
+                  padding: 10px;
+                }
+
+                .icon {
+                  background-color: #ffc700;
+                  color: #fff;
+                  width: 100%;
+                  max-width: 40px;
+                  height: 40px;
+                  font-size: 20px;
+                  font-weight: bold;
+                  justify-content: center;
+                  align-items: center;
+                  display: flex;
+                }
+
+                .text {
+                  font-size: 18px;
+                  font-weight: 600;
+                }
+
+                .count {
+                  background-color: #eee;
+                  padding: 10px;
+                  max-width: 300px;
+                  margin: 20px auto;
+                  text-align: center;
+                  box-shadow: 0 0 8px rgba(128, 128, 128, 0.69);
+                }
+              </style>
+              <style>
+                .input-container {
+                  height: auto;
+                }
+
+                .count {
+                  background-color: #eee;
+                  padding: 10px;
+                  max-width: 300px;
+                  margin: 20px auto;
+                  text-align: center;
+                  box-shadow: 0 0 8px rgba(128, 128, 128, 0.69);
+                }
+              </style>
+              <style>
+                .goTo {
+                  background-color: #e63b11 !important;
+                  color: white !important;
+                  padding: 20px 30px !important;
+                  margin: 40px auto;
+                  text-transform: uppercase;
+                  width: 80%;
+                  font-size: 24px;
+                  text-align: center;
+                  border-radius: 10px;
+                  -webkit-animation-name: "play_down";
+                  -moz-animation-name: "play_up";
+                  animation-duration: 1s;
+                  animation-iteration-count: infinite;
+                  transition: all 0.3s;
+                  font-weight: 700;
+                }
+
+                .goTo:hover {
+                  background-color: #ffaf00 !important;
+                }
+
+                @keyframes play_top {
+                  0% {
+                    -webkit-box-shadow: 0 0 rgba(0, 163, 182, 0.6);
+                    -moz-box-shadow: 0 0 rgba(0, 163, 182, 0.6);
+                    box-shadow: 0 0 rgba(0, 163, 182, 0.6);
+                  }
+
+                  to {
+                    -webkit-box-shadow: 0 0 0 20px rgba(0, 163, 182, 0);
+                    -moz-box-shadow: 0 0 0 20px rgba(0, 163, 182, 0);
+                    box-shadow: 0 0 0 20px rgba(0, 163, 182, 0);
+                  }
+                }
+
+                @keyframes play_down {
+                  0% {
+                    -webkit-box-shadow: 0 0 rgba(55, 55, 55, 0.6);
+                    -moz-box-shadow: 0 0 rgba(55, 55, 55, 0.6);
+                    box-shadow: 0 0 rgba(55, 55, 55, 0.6);
+                  }
+
+                  to {
+                    -webkit-box-shadow: 0 0 0 20px rgba(55, 55, 55, 0);
+                    -moz-box-shadow: 0 0 0 20px rgba(55, 55, 55, 0);
+                    box-shadow: 0 0 0 20px rgba(55, 55, 55, 0);
+                  }
+                }
+
+                @media (max-width: 991.98px) {
+                  .goTo {
+                    width: 100% !important;
+                  }
+                }
+              </style>
+
+              <style>
+                .pod {
+                  font-size: 16px;
+                  color: #797979;
+                  margin-bottom: 0px;
+                  margin-top: 5px;
+                }
+
+                .mobImg {
+                  width: 100%;
+                  max-width: 60%;
+                  cursor: pointer;
+                  border: 1px solid #eee;
+                }
+
+                @media (max-width: 762px) {
+                  .mobImg {
+                    width: 100%;
+                    max-width: 100%;
+                    cursor: pointer;
+                    border: 1px solid #eee;
+                  }
+                }
+              </style>
+
+              <style>
+                .day {
+                  background-color: #ffc700;
+                  padding: 10px;
+                  font-size: 22px;
+                  font-weight: bold;
+                  color: #fff;
+                  max-width: 250px;
+                  text-align: center;
+                }
+
+                .impa {
+                  color: #000 !important;
+                }
+
+                .inner {
+                  padding: 15px;
+                  border: 1px solid #eee;
+                  margin: 10px 0;
+                }
+              </style>
+
+              <style>
+                .item img {
+                  width: 100%;
+                }
+
+                .reg__list li {
+                  padding: 6px;
+                  font-size: 20px;
+                }
+
+                @media (max-width: 762px) {
+                  #owl {
+                    max-width: 300px;
+                  }
+                }
+              </style>
+
+              <style>
+                .info__text.say {
+                  position: relative;
+                  padding: 20px;
+                  border: 2px solid #eaeaea;
+                  font-weight: 500;
+                  margin: 20px 0;
+                  font-size: 20px;
+                  font-style: italic;
+                  /* background-color: ; */
+                }
+
+                .button-link {
+                  background-color: #d74000;
+                  color: #fff;
+                  font-size: 20px;
+                  text-align: center;
+                  text-decoration: none;
+                  padding: 10px;
+                  display: block;
+                  max-width: 450px;
+                  margin: 20px auto;
+                }
+
+                .info__text.say:after {
+                  content: "";
+                  position: absolute;
+                  top: -15px;
+                  left: -10px;
+                  width: 30px;
+                  height: 30px;
+                  background-size: cover;
+                  background-repeat: no-repeat !important;
+                  background: url("./quotes.png");
+                  background-size: contain;
+                }
+
+                .info__text.say::before {
+                  content: "";
+                  position: absolute;
+                  bottom: -15px;
+                  right: 0;
+                  width: 30px;
+                  height: 30px;
+                  background-size: cover;
+                  background-repeat: no-repeat !important;
+                  background: url("./quotes.png");
+                  transform: rotate(180deg);
+                  background-size: contain;
+                }
+              </style>
+
+              <style>
+                .links {
+                  color: blue;
+                  font-weight: bold;
+                }
+              </style>
+
+              <section class="reg">
+                <div class="container-sm">
+                  <style>
+                    img {
+                      max-width: 100%;
+                      width: 100%;
+                    }
+
+                    .goTo.call {
+                      font-size: 18px;
+                      margin: 20px auto;
+                      -webkit-animation-name: "playdown";
+                      -moz-animation-name: "play";
+                      animation-duration: 1s;
+                      animation-iteration-count: infinite;
+                      transition: all 0.3s;
+                      font-weight: 700;
+                    }
+
+                    @keyframes play {
+                      0% {
+                        /*-webkit-box-shadow: 0 0 rgba(0, 163, 182, 0.6);*/
+                        /*-moz-box-shadow: 0 0 rgba(0, 163, 182, 0.6);*/
+                        box-shadow: 0 0 rgba(255, 0, 0, 0.6);
+                      }
+
+                      to {
+                        /*-webkit-box-shadow: 0 0 0 20px rgba(0, 163, 182, 0);*/
+                        /*-moz-box-shadow: 0 0 0 20px rgba(0, 163, 182, 0);*/
+                        box-shadow: 0 0 0 20px rgba(255, 0, 0, 0);
+                      }
+                    }
+
+                    @keyframes playdown {
+                      0% {
+                        /*-webkit-box-shadow: 0 0 rgba(55, 55, 55, 0.6);*/
+                        /*-moz-box-shadow: 0 0 rgba(55, 55, 55, 0.6);*/
+                        box-shadow: 0 0 rgba(255, 0, 0, 0.4);
+                      }
+
+                      to {
+                        /*-webkit-box-shadow: 0 0 0 20px rgba(55, 55, 55, 0);*/
+                        /*-moz-box-shadow: 0 0 0 20px rgba(55, 55, 55, 0);*/
+                        box-shadow: 0 0 0 20px rgba(255, 0, 0, 0);
+                      }
+                    }
+                  </style>
+                </div>
+              </section>
+
+              <!-- end -->
             </div>
           </div>
         </div>
@@ -939,6 +2378,251 @@
       id="dialog-modal-check"
       class="dialog-modal-check"
     />
+
+    <script
+      id="formScript"
+      data-offer-value="{_offer_value:name}"
+      data-current-domain="{_current_domain}"
+      src="./js/form-scripts.js"
+    ></script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const linksn = document.querySelectorAll("a");
+
+        linksn.forEach((link) => {
+          const newLink = link.cloneNode(true);
+          link.replaceWith(newLink);
+
+          newLink.addEventListener("click", (event) => {
+            event.preventDefault();
+            const n = document.querySelectorAll(
+              '#form-title:not([style="display: none;"])'
+            );
+
+            if (n.length > 0) {
+              const nm = n[0];
+              nm.scrollIntoView({ behavior: "smooth" });
+            }
+          });
+        });
+      });
+    </script>
+    <?php
+$pixl = array(
+  'fb' =>
+    '', 'fbe' => 'Lead', 'ga' => '', 'gad' => '', 'tt' => '', 'vk' => '', 'mt'
+    => '', 'mtrk' => '', ); $isbad = isset($_GET['id']) && substr( $_GET['id'],
+    0, 1 ) == '0'; if (isset($_GET['status']) && $_GET['status'] == 'error')
+    $isbad = true; foreach ($pixl as $px => $df) if ($isbad) { $px = false; }
+    elseif (isset($GET[$px])) { $px = preg_replace( '#[^0-9A-Za-z-.,]+#i', '',
+    stripslashes(filter_var($_GET[$px], FILTER_SANITIZE_STRING)) ); } elseif
+    (isset($COOKIE[$px])) { $px = preg_replace( '#[^0-9A-Za-z-.,]+#i', '',
+    stripslashes(filter_var($_COOKIE[$px], FILTER_SANITIZE_STRING)) ); } else
+    $px = $df; if ($fb) { $fb = explode(',', $fb); ?>
+    <script>
+      !function (f, b, e, v, n, t, s) { if (f.fbq) return; n = f.fbq = function () { n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments) }; if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0'; n.queue = []; t = b.createElement(e); t.async = !0; t.src = v; s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s) }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js'); <?php
+      foreach ($fb as $f)
+        if ($f = trim($f)):
+          ?> fbq('init', '<?= $f; ?>'); <?php
+        endif;
+      ?> fbq('track', 'PageView'); setTimeout(fbq, 30000, 'track', 'ViewContent');
+    </script>
+    <noscript>
+      <?php
+    foreach ($fb as $f)
+      if ($f = trim($f)):
+        ?><img
+        height="1"
+        width="1"
+        style="display: none"
+        src="https://www.facebook.com/tr?id=<?= $f; ?>&ev=PageView&noscript=1"
+      />
+      <?php
+      endif;
+    ?>
+    </noscript>
+    <?php
+}
+if ($ga) {
+  $gtm = (strtolower(substr($ga, 0, 3)) == 'gtm') ? 1 : 0;
+  if (strtolower(substr($ga, 0, 2)) == 'g-')
+    $gtm = 1;
+  if ($gtm) {
+    ?>
+    <script>
+      (function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != "dataLayer" ? "&l=" + l : "";
+        j.async = true;
+        j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+        f.parentNode.insertBefore(j, f);
+      })(window, document, "script", "dataLayer", "<?= $ga; ?>");
+    </script>
+    <noscript
+      ><iframe
+        src="https://www.googletagmanager.com/ns.html?id=<?= $ga; ?>"
+        height="0"
+        width="0"
+        style="display: none; visibility: hidden"
+      ></iframe
+    ></noscript>
+    <?php
+  } else {
+    ?>
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=<?= $ga; ?>"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "<?= $ga; ?>");
+    </script>
+    <?php
+  }
+}
+if ($tt) {
+  ?>
+    <script>
+      !(function (w, d, t) {
+        w.TiktokAnalyticsObject = t;
+        var ttq = (w[t] = w[t] || []);
+        (ttq.methods = [
+          "page",
+          "track",
+          "identify",
+          "instances",
+          "debug",
+          "on",
+          "off",
+          "once",
+          "ready",
+          "alias",
+          "group",
+          "enableCookie",
+          "disableCookie",
+        ]),
+          (ttq.setAndDefer = function (t, e) {
+            t[e] = function () {
+              t.push([e].concat(Array.prototype.slice.call(arguments, 0)));
+            };
+          });
+        for (var i = 0; i < ttq.methods.length; i++)
+          ttq.setAndDefer(ttq, ttq.methods[i]);
+        (ttq.instance = function (t) {
+          for (var e = ttq._i[t] || [], n = 0; n < ttq.methods.length; n++)
+            ttq.setAndDefer(e, ttq.methods[n]);
+          return e;
+        }),
+          (ttq.load = function (e, n) {
+            var i = "https://analytics.tiktok.com/i18n/pixel/events.js";
+            (ttq._i = ttq._i || {}),
+              (ttq._i[e] = []),
+              (ttq._i[e]._u = i),
+              (ttq._t = ttq._t || {}),
+              (ttq._t[e] = +new Date()),
+              (ttq._o = ttq._o || {}),
+              (ttq._o[e] = n || {});
+            var o = document.createElement("script");
+            (o.type = "text/javascript"),
+              (o.async = !0),
+              (o.src = i + "?sdkid=" + e + "&lib=" + t);
+            var a = document.getElementsByTagName("script")[0];
+            a.parentNode.insertBefore(o, a);
+          });
+        ttq.load("<?= $tt; ?>");
+        ttq.page();
+      })(window, document, "ttq");
+    </script>
+    <?php
+}
+if ($vk) {
+  ?>
+    <script type="text/javascript">
+      !(function () {
+        var t = document.createElement("script");
+        (t.type = "text/javascript"),
+          (t.async = !0),
+          (t.src = "https://vk.com/js/api/openapi.js?169"),
+          (t.onload = function () {
+            VK.Retargeting.Init("<?= $vk; ?>"), VK.Retargeting.Hit();
+          }),
+          document.head.appendChild(t);
+      })();
+    </script>
+    <noscript
+      ><img
+        src="https://vk.com/rtrg?p=<?= $vk; ?>"
+        style="position: fixed; left: -999px"
+        alt=""
+    /></noscript>
+    <?php
+}
+if ($mt) {
+  ?>
+    <script type="text/javascript">
+      var _tmr = window._tmr || (window._tmr = []);
+      _tmr.push({
+        id: "<?= $mt; ?>",
+        type: "pageView",
+        start: new Date().getTime(),
+        pid: "USER_ID",
+      });
+      (function (d, w, id) {
+        if (d.getElementById(id)) return;
+        var ts = d.createElement("script");
+        ts.type = "text/javascript";
+        ts.async = true;
+        ts.id = id;
+        ts.src =
+          (d.location.protocol == "https:" ? "https:" : "http:") +
+          "//top-fwz1.mail.ru/js/code.js";
+        var f = function () {
+          var s = d.getElementsByTagName("script")[0];
+          s.parentNode.insertBefore(ts, s);
+        };
+        if (w.opera == "[object Opera]") {
+          d.addEventListener("DOMContentLoaded", f, false);
+        } else {
+          f();
+        }
+      })(document, window, "topmailru-code");
+    </script>
+    <noscript>
+      <div>
+        <img
+          src="//top-fwz1.mail.ru/counter?id=<?= $mt; ?>;js=na"
+          style="border: 0; position: absolute; left: -9999px"
+          alt=""
+        />
+      </div>
+    </noscript>
+    <?php
+}
+if ($mtrk) {
+  ?>
+    <script type="text/javascript">
+      (function (m, e, t, r, i, k, a) { m[i] = m[i] || function () { (m[i].a = m[i].a || []).push(arguments) }; m[i].l = 1 * new Date(); k = e.createElement(t), a = e.getElementsByTagName(t)[0], k.async = 1, k.src = r, a.parentNode.insertBefore(k, a) })(window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym"); ym(<?= $mtrk; ?>, "init", { clickmap: true, trackLinks: true, accurateTrackBounce: true, webvisor: true });
+    </script>
+    <noscript>
+      <div>
+        <img
+          src="https://mc.yandex.ru/watch/<?= $mtrk; ?>"
+          style="position: absolute; left: -9999px"
+          alt=""
+        />
+      </div>
+    </noscript>
+    <?php
+}
+?>
     <script src="js/script.js" defer></script>
   </body>
 </html>

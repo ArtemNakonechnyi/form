@@ -1,0 +1,412 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap");
+
+.formWrapper {
+  position: relative;
+}
+
+.form-input input,
+.form-input .group,
+.form-input label,
+.form-flex-container p,
+.btn-main,
+.card,
+.spot,
+.form__title-1,
+.spot-available-text,
+.iti__flag-container,
+#form-header-popup,
+.form__accent-text {
+  font-family: "Roboto Condensed", serif !important;
+}
+
+.reg-container {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  height: auto;
+  width: 100%;
+}
+.btn-main {
+  cursor: pointer;
+  width: 100%;
+  padding: 0.75rem 2rem;
+  font-size: 1.5rem;
+  line-height: 2rem;
+  border-radius: 9999px;
+  border-width: 0px;
+  --tw-bg-opacity: 1;
+  background-color: rgb(93 95 239 / var(--tw-bg-opacity));
+  text-align: center;
+  font-weight: 700;
+  text-transform: uppercase;
+  --tw-numeric-figure: lining-nums;
+  font-variant-numeric: var(--tw-ordinal) var(--tw-slashed-zero)
+    var(--tw-numeric-figure) var(--tw-numeric-spacing)
+    var(--tw-numeric-fraction);
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
+  transition-property: color, background-color, border-color,
+    text-decoration-color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 0.15s;
+}
+.btn-main:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(70 72 206 / var(--tw-bg-opacity));
+}
+
+.pulse {
+  width: 80%;
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.1);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+.shake {
+  animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) infinite;
+  transform: translate3d(0, 0, 0);
+}
+
+@keyframes shake {
+  10%,
+  90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+
+  20%,
+  80% {
+    transform: translate3d(2px, 0, 0);
+  }
+
+  30%,
+  50%,
+  70% {
+    transform: translate3d(-4px, 0, 0);
+  }
+
+  40%,
+  60% {
+    transform: translate3d(4px, 0, 0);
+  }
+}
+
+.form__title-1 {
+  margin: 0;
+  margin-bottom: 20px;
+  text-align: center;
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 1.25;
+  --tw-text-opacity: 1;
+  color: rgb(41 30 15 / var(--tw-text-opacity));
+  font-size: 1.5rem;
+}
+.form__accent-text {
+  --tw-text-opacity: 1;
+  color: rgb(93 95 239 / var(--tw-text-opacity));
+}
+.card {
+  border-radius: 2.5rem;
+  background-color: #ffffffb2;
+  border: 1px solid rgba(0, 0, 0, 0.1); /* Небольшая обводка */
+  --tw-shadow: 0px 4px 40px 0px rgba(0, 0, 0, 0.4); /* Более тёмная тень */
+  --tw-shadow-colored: 0px 4px 40px 0px var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),
+    var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+  --tw-backdrop-blur: blur(20px);
+  -webkit-backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness)
+    var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale)
+    var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert)
+    var(--tw-backdrop-opacity) var(--tw-backdrop-saturate)
+    var(--tw-backdrop-sepia);
+  backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness)
+    var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale)
+    var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert)
+    var(--tw-backdrop-opacity) var(--tw-backdrop-saturate)
+    var(--tw-backdrop-sepia);
+}
+
+.free {
+  background-color: rgb(10 6 1 / var(--tw-bg-opacity));
+}
+
+.taken {
+  background-color: rgb(10 6 1 / var(--tw-bg-opacity));
+}
+
+/* Для элементов с классом .spot, добавляем анимацию появления с пульсацией */
+@keyframes pulseIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+    background-color: rgb(10 6 1 / 0.8); /* начальный тёмный фон */
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+    background-color: var(
+      --target-bg
+    ); /* целевой цвет, задаётся через переменную */
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+    background-color: var(--target-bg);
+  }
+}
+
+/* Применяем анимацию к каждому .spot при появлении */
+.spot {
+  box-sizing: border-box;
+  display: flex;
+  height: 4rem;
+  width: 4rem;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.75rem;
+  border-width: 2px;
+  --tw-border-opacity: 1;
+  border-color: rgb(10 6 1 / var(--tw-border-opacity));
+  --tw-bg-opacity: 1;
+  background-color: rgb(10 6 1 / var(--tw-bg-opacity));
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
+  opacity: 0.5;
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 0.5s;
+  padding: 4px;
+}
+
+@media (max-width: 640px) {
+  .spot {
+    height: 3rem;
+    width: 3rem;
+  }
+}
+/* Класс, который будет включать анимацию */
+.animate-spot {
+  animation: pulseIn 0.6s forwards;
+}
+
+/* Последовательная задержка для каждого элемента в сетке */
+.spot-grid .spot:nth-child(1) {
+  animation-delay: 0.1s;
+}
+.spot-grid .spot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.spot-grid .spot:nth-child(3) {
+  animation-delay: 0.3s;
+}
+.spot-grid .spot:nth-child(4) {
+  animation-delay: 0.4s;
+}
+.spot-grid .spot:nth-child(5) {
+  animation-delay: 0.5s;
+}
+.spot-grid .spot:nth-child(6) {
+  animation-delay: 0.6s;
+}
+.spot-grid .spot:nth-child(7) {
+  animation-delay: 0.7s;
+}
+.spot-grid .spot:nth-child(8) {
+  animation-delay: 0.8s;
+}
+.spot-grid .spot:nth-child(9) {
+  animation-delay: 0.9s;
+}
+.spot-grid .spot:nth-child(10) {
+  animation-delay: 1s;
+}
+
+/* Задаём целевые цвета для разных типов спотов */
+.spot.taken {
+  --target-bg: #f87171; /* например, красный оттенок */
+}
+
+.spot.free {
+  --target-bg: #34d399; /* например, зелёный оттенок */
+}
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex; /* не скрываем через display, чтобы плагин мог измерить размеры */
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+
+  /* Начально скрыто через прозрачность и отключение кликов */
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+/* При наличии класса .show попап становится видимым */
+.popup.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.popup-content {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 600px;
+  width: 90%;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  position: relative;
+  height: 600px;
+  /* position: absolute;
+  right: 340px;
+  top: 200px; */
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 20px;
+  cursor: pointer;
+}
+.spot-grid-container {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.form__title-1 {
+  margin: 0;
+  margin-bottom: 0px;
+  margin-bottom: 20px;
+  text-align: center;
+  line-height: 1.75rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 1.25;
+  --tw-text-opacity: 1;
+  color: rgb(41 30 15 / var(--tw-text-opacity));
+  padding: 10px;
+}
+.form-flex-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  row-gap: 2rem;
+  flex-direction: column;
+}
+
+.form-flex-container form {
+  width: 100%;
+}
+
+.spot-available-text {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  text-align: center;
+  font-weight: 900;
+}
+
+.animate-spot {
+  animation: pulseIn 0.6s forwards;
+  animation-delay: 0s;
+}
+
+/* Класс скрытого состояния, который оставляет элемент в документе */
+.hidden {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+/* Класс видимого состояния */
+.visible {
+  opacity: 1;
+  pointer-events: auto;
+  transition: opacity 0.3s ease;
+}
+#form-header-popup {
+  width: 100%;
+  text-align: center;
+}
+.form-input {
+  margin-bottom: 0.5rem;
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  -moz-column-gap: 0.25rem;
+  column-gap: 0.25rem;
+}
+.form-input input {
+  border-radius: 9999px;
+  border-width: 1px;
+  --tw-border-opacity: 1;
+  border-color: rgb(93 95 239 / var(--tw-border-opacity));
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  --tw-numeric-figure: lining-nums;
+  font-variant-numeric: var(--tw-ordinal) var(--tw-slashed-zero)
+    var(--tw-numeric-figure) var(--tw-numeric-spacing)
+    var(--tw-numeric-fraction);
+  --tw-text-opacity: 1;
+  color: rgb(0 0 0 / var(--tw-text-opacity));
+}
+
+#phone {
+  width: 100%;
+}
+.error {
+  border-color: red !important;
+}
+
+.iti__flag-container {
+  height: 39px !important;
+}
+.iti__flag-container,
+.iti__selected-flag {
+  border-top-left-radius: 9999px;
+  border-bottom-left-radius: 9999px;
+  border-width: 1px;
+}
+.iti__selected-dial-code {
+  color: black !important;
+}
+
+@media (max-width: 640px) {
+  .form__title-1 {
+    font-size: 24px;
+  }
+  .btn-main {
+    font-size: 20px;
+    padding: 10px 20px;
+  }
+  .form-flex-container {
+    row-gap: 10px;
+  }
+  .error {
+    font-size: 10px;
+  }
+  /* .popup-content {
+    position: relative;
+  } */
+}

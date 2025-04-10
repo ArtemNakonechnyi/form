@@ -16,11 +16,11 @@ function displayDate() {
 
 displayDate();
 
-mainForm.addEventListener("submit", (e) => {
-  e.preventDefault();
-  const formData = new FormData(mainForm);
-  formData.forEach((val, key) => {
-    console.log(`${key}: ${val}`);
-  });
-  mainForm.reset();
-});
+// mainForm.addEventListener("submit", (e) => {
+//   e.preventDefault();
+//   const formData = new FormData(mainForm);
+//   formData.forEach((val, key) => {
+//     console.log(`${key}: ${val}`);
+//   });
+//   mainForm.reset();
+// });
